@@ -86,6 +86,11 @@ describe("Basic user flow for SPA ", () => {
 
   it("Test6: On first Entry page - checking <body> element classes", async () => {
     // implement test6: Clicking on the first journal entry should update the class attribute of <body> to ‘single-entry’
+    const className = await page.$eval("body", (page) => {
+      return page.className;
+    });
+
+    expect(className).toBe("single-entry");
   });
 
   it("Test7: Clicking the settings icon, new URL should contain #settings", async () => {
