@@ -183,9 +183,8 @@ describe("Basic user flow for SPA ", () => {
       },
     });
   });
-
   // create your own test 17
-  //test17: Go back, same as usual
+  //test17: Clicking back button once should lead user to homepage & verify URL
   it("Test17: Clicking back button once should lead user to homepage & verify URL", async () => {
     await page.goBack();
 
@@ -194,29 +193,30 @@ describe("Basic user flow for SPA ", () => {
   });
 
   // create your own test 18
-  //Test18: Test18: Verifying that the new URL contains /#entry6
-  it("Test18: Verifying that the new URL contains /#entry6", async () => {
+  //Test18: Verify the url is correct when clicking on the tenth entry
+  it("Test18: Verifying that the new URL contains /#entry10", async () => {
     const entry = await page.$$("journal-entry");
-    const entry2 = entry[5];
+    const entry2 = entry[9];
     await entry2.click();
     await page.waitForSelector("entry-page");
 
     const url = await page.url();
-    expect(url).toBe("http://127.0.0.1:5500/#entry6");
+    expect(url).toBe("http://127.0.0.1:5500/#entry10");
   }, 10000);
 
   // create your own test 19
-  //Test19: Verify the title is current when clicking on the 6th entry
-  it("Test19: Verify the title is current when clicking on the 6th entry", async () => {
-    const header = await page.$eval("h1", (header) => {
-      return header.textContent;
-    });
-
-    expect(header == "Entry 6").toBe(true);
+  //Test19: Check if audio exists on the tenth entry
+  it("Test19: Check if audio exists on the tenth entry", async () => {
+    const dataEntry = await page.$("entry-page");
+    const dataObject = await page.evaluate(
+      (dataEntry) => dataEntry.entry,
+      dataEntry
+    );
+    expect(Boolean(dataObject.audio)).toBe(true);
   });
 
   // create your own test 20
-  // test20: Verify the entry page contents is correct when clicking on the 6th entry
+  // test20: Verify the entry page contents is correct when clicking on the tenth entry
   it("Test20: For tenth entry page - checking <entry-page> contents", async () => {
     const dataEntry = await page.$("entry-page");
     const dataObject = await page.evaluate(
@@ -224,17 +224,16 @@ describe("Basic user flow for SPA ", () => {
       dataEntry
     );
     expect(dataObject).toEqual({
-      title: "I am... Iron Man",
-      date: "4/30/2021",
+      title: "No, I am your father",
+      date: "5/4/2021",
       content:
-        "Big man in a suit of armour. Take that off, what are you? Genius, billionaire, playboy, philanthropist.",
+        "A long time ago, in a galaxy far, far away... It is a period of civil war. Rebel spaceships, striking from a hidden base, have won their first victory against the evil Galactic Empire. During the battle, Rebel spies managed to steal secret plans to the Empire's ultimate weapon, the Death Star, an armored space station with enough power to destroy an entire planet. Pursued by the Empire's sinister agents, Princess Leia races home aboard her starship, custodian of the stolen plans that can save her people and restore freedom to the galaxy....",
       image: {
-        src: "https://i.ytimg.com/vi/gAZKhM4OWXQ/maxresdefault.jpg",
-        alt: "captain america face to face with iron man",
+        src: "https://starwarsblog.starwars.com/wp-content/uploads/2021/04/star-wars-may-the-4th-2021-TALL-3973202.jpg",
+        alt: "may the fourth be with you",
       },
+      audio:
+        "https://drive.google.com/uc?export=download&id=1luYh909US7ZBFe6uo440Vv_LNnRdnErT",
     });
   });
-
-  // create your own test 20
-  // test20: Verify the entry page contents is correct when clicking on the tenth entry
 });
